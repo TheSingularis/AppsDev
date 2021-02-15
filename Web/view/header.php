@@ -6,7 +6,8 @@
 
     <base href="http://192.168.1.59/">
 
-    <link rel="stylesheet" type="text/css" href="style/main.css">
+    <link rel="stylesheet" type="text/css" href="/style/main.css">
+    <link rel="stylesheet" type="text/css" href="/style/old_main.css">
 </head>
 
 <body>
@@ -17,7 +18,7 @@
 
         <h2>
             <?php if (isset($_SESSION['user'])) {
-                $user = unserialize($_SESSION['user']);                
+                $user = unserialize($_SESSION['user']);
                 echo 'Welcome ' . $user->getFullName();
             }
             ?>
