@@ -1,0 +1,202 @@
+body {
+    font-family: 'Ubuntu', Helvetica, sans-serif;
+
+	max-width: 1024px;
+	
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-top: 1em;
+	margin-bottom: 1em;
+	
+
+    border: 4px solid steelblue;
+    box-shadow:  0 0 20px;
+}
+
+/* Begin Nav Bar */
+
+/* Old
+#nav_menu {
+    background-color: steelblue;
+}
+
+#nav_menu ul li a{  
+    color:white;
+}
+
+#nav_menu ul {
+    list-style: none;
+    position: relative;
+
+    margin: 0;
+    padding-left: 0;
+}
+
+#nav_menu ul li {
+    float: left;
+    width: calc(100% / 7);
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    background-color: steelblue;
+
+    font-weight: bold;
+    text-align: center;
+}
+
+#nav_menu ul li:hover, #nav_menu ul li:focus {
+    background-color: lightsteelblue;
+}
+
+#nav_menu ul li:hover > ul, #nav_menu ul li:focus > ul {
+    display: block;
+}
+
+#nav_menu > ul::after {    
+    content: "";
+    display: block;
+    clear: both;
+}
+*/
+
+/* New */
+
+#nav_menu ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    list-style: none;
+    position: relative;
+
+    margin: 0;
+    padding-left: 0;
+}
+
+#nav_menu ul li {    
+    padding: 1em;
+
+    background-color: steelblue;
+
+    font-weight: bold;
+    text-align: center;
+}
+
+#nav_menu ul li a{  
+    color:white;
+    vertical-align: middle;
+}
+
+#nav_menu ul li:hover, #nav_menu ul li:focus {
+    background-color: lightsteelblue;
+}
+
+/* End Navigation*/
+
+header {
+    background-color: steelblue;
+}
+
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+
+	width: 500px;		/* As listed in instructions */
+	max-height: 700px;
+
+	border: 4px solid steelblue;
+	background-color: lightgrey;
+}
+
+.imageNav{
+	text-align: center;
+	margin: 0 auto;
+}
+
+main {
+	padding: 1em;
+}
+
+footer {
+    text-align: center;
+    font-size: .75em;
+    color: white;
+    background-color: steelblue;
+
+	padding-top: 50%;
+
+    padding-top: 1em;
+	padding-bottom: 1em;
+	
+	bottom: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	padding-bottom: 0.5em;
+}
+
+h1 {
+    color: white;
+	text-align: center;
+	font-size: 1.75em;
+	
+	margin: 0;
+	padding: 0.5em;
+}
+
+h2 { 
+	margin-top: 0;
+	text-align: center;
+}
+
+h3 {
+    font-size: 1.25em;
+}
+
+main h3 {
+    color: maroon;
+}
+
+label {
+	display: inline-block;
+	width: 140px;
+	text-align: right;
+}
+
+input {
+	margin: 2px;
+}
+
+select {
+	margin: 2px;
+}
+
+/* table time */
+
+table {
+	margin-top: 1em;
+	padding: 1em;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: steelblue;
+	color: white;
+}
+
+tr:nth-child(even) {background: #f2f2f2}
