@@ -1,7 +1,6 @@
 <?php
 class User
 {
-
     public $id;
     public $userTypeId;
     public $firstName;
@@ -10,8 +9,6 @@ class User
     public $password;
     public $created;
     public $updated;
-
-
 
     public function __construct($_firstName, $_lastName, $_email, $_password, $_id = null, $_userTypeId = null, $_created = null, $_updated = null) {
         $this->id = $_id;
@@ -22,6 +19,10 @@ class User
         $this->password = $_password;
         $this->created = $_created;
         $this->updated = $_updated;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function getFirstName() {

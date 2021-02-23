@@ -18,7 +18,7 @@
 
         <h2>
             <?php if (isset($_SESSION['user'])) {
-                $user = unserialize($_SESSION['user']);
+                $user = unserialize($_SESSION['user']);                
                 echo 'Welcome ' . $user->getFullName();
             }
             ?>
@@ -34,6 +34,7 @@
             <?php else : ?>
                 <ul>
                     <li><a href="index.php">Home</a></li>
+                    <li><a href="list_manager">ToDo Lists</a></li>
                     <li><a href="user_manager?controllerRequest=user_logout">Log Out</a></li>
                 </ul>
             <?php endif; ?>

@@ -63,8 +63,8 @@ switch ($controllerChoice) {
         if ($user !== null) {
             $_SESSION['user'] = serialize($user);
 
-            include '../index.php';
-
+            header('Location: ../list_manager/index.php');
+            
         } else {
             $badLogin = true;
             include 'user_login.php';

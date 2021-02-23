@@ -8,6 +8,11 @@ if (session_id() == '') {
     session_start();
 }
 
+if (isset($_SESSION['user'])) {
+    header('Location: list_manager/index.php');
+}
+
+require_once 'model/User.php';
 require_once 'view/header.php';
 ?>
 

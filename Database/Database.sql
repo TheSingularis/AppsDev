@@ -1,5 +1,6 @@
-
-use id16109064_sluiterappsdev;
+drop database if exists AppsDev;
+create database AppsDev;
+use AppsDev;
 
 create table `user`
 (
@@ -14,13 +15,13 @@ create table `user`
 );
 
 insert into `user`
-	(`userTypeID`, `email`, `password`)
+	(`userTypeID`, `firstName`, `lastName`, `email`, `password`)
 values
-(1, 'jordan@yahoo.com', 'test'),
-(1, 'test@gmail.com', 'test'),
-(2, 'squishycat@hotmail.com', 'test'),
-(2, 'tcace@yahoo.com', 'test'),
-(2, 'heythatsmine@outlook.com', 'test');
+(1, 'jordan', 'sluiter', 'jordan@yahoo.com', 'test'),
+(1, 'andy', 'bangsberg', 'test@gmail.com', 'test'),
+(2, 'firstName', 'lastName', 'squishycat@hotmail.com', 'test'),
+(2, 'spongebob', 'squarepants', 'tcace@yahoo.com', 'test'),
+(2, 'panda', 'express', 'heythatsmine@outlook.com', 'test');
 
 create table `list`
 (
@@ -46,9 +47,9 @@ create table `userList`
 );
 
 insert into `userList` (`listID`, `userID`)
-values (1, 3),
+values (1, 1),
 	   (1, 2),
-       (2, 2);
+       (2, 1);
 
 create table `userType`
 (
@@ -63,21 +64,6 @@ values
 (1, 'Admin'),
 (2, 'End User');
 
-create table `task`
-(
-  `id` int primary key AUTO_INCREMENT,
-  `listID` int,
-  `taskTypeID` int,
-  `task` varchar(255),
-  `completed` boolean,
-  `repeatTime` int,
-  `productID` int,
-  `productVolume` int,
-  `productPurchaseLimit` int,
-  `created` timestamp default NOW(),
-  `updated` timestamp default NOW()
-);
-
 create table `taskType`
 (
   `id` int primary key AUTO_INCREMENT,
@@ -85,6 +71,34 @@ create table `taskType`
   `created` timestamp default NOW(),
   `updated` timestamp default NOW()
 );
+
+insert into `taskType` (`id`, `description`)
+values 
+(1, 'Basic boolean check'),
+(2, 'Time based check');
+
+create table `task`
+(
+  `id` int primary key AUTO_INCREMENT,
+  `listID` int,
+  `taskTypeID` int default 1,	/* 1 is a checkbox task with no complications */
+  `description` varchar(255),
+  `completed` boolean default false,
+  `repeatTime` int default -1,
+  `productID` int,
+  `productVolume` int default -1,
+  `productPurchaseLimit` int default -1,
+  `created` timestamp default NOW(),
+  `updated` timestamp default NOW()
+);
+
+insert into `task` (`listID`, `description`)
+values
+(1, 'Feed the Chickens'),
+(1, 'Feed the Dogs'),
+(2, 'Replace the kitty litter'),
+(2, 'collect chicken eggs'),
+(2, 'Fill the cats water');
 
 create table `stores`
 (

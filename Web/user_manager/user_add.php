@@ -13,7 +13,7 @@
         <input type="text" name="lastName" placeholder="Last Name"><br>
         <input type="email" name="email" placeholder="Email"><br>
         <input type="password" name="password" placeholder="Password"><br>
-        <input type="submit" value="Go">
+        <input type="submit" value="Register">
     </form>
 </main>
 

@@ -1,0 +1,3 @@
+#new {      /* New Database Inserts show as green when you go to the list page after inserting them */
+    background-color: lightgreen !important;
+}
