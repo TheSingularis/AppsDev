@@ -8,6 +8,7 @@
             <td><b>ID - Temp</b></td>
             <td><b>Title</b></td>
             <td><b>Description</b></td>
+            <td><b>shareUUID - Temp</b></td>
             <td><b>Task Count</b></td>
             <td><b>Created - Temp</b></td>
             <td><b>Updated - Temp</b></td>
@@ -25,6 +26,7 @@
                         <td><?php echo $todo->getId(); ?></td>
                         <td><?php echo $todo->getTitle(); ?></td>
                         <td><?php echo $todo->getDescription(); ?></td>
+                        <td><?php echo $todo->getShareUUID(); ?></td>
                         <td><?php echo $todo->getTaskCount(); ?></td>
                         <td><?php echo $todo->getCreated(); ?></td>
                         <td><?php echo $todo->getUpdated(); ?></td>
@@ -46,10 +48,16 @@
                 <?php endforeach; 
             }?>
             <tr>
-                <td colspan="6">
+                <td colspan="5">
                     <a href="list_manager?controllerRequest=todo_add">
                         <!-- TODO: Center text -->
                         Add New ToDo List
+                    </a>
+                </td>
+                 <td colspan="4">
+                    <a href="list_manager?controllerRequest=todo_share">
+                        <!-- TODO: Center text -->
+                        Add ToDo from Share Code
                     </a>
                 </td>
             </tr>

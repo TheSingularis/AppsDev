@@ -6,3 +6,9 @@
 </body>
 
 </html>
+
+<?php 
+    //TODO: Remove
+    //require_once "../view/showGetPostVariables.php";
+    //funShowAllPOSTandGETvariables();
+?>

@@ -80,15 +80,38 @@ switch ($controllerChoice) {                //naming convention is "'location'_'
             header('Location: ../list_manager/index.php');
         }
         break;
+    case 'todo_share':
+        include 'todo_share.php';
+        break;
+    case 'todo_share_process':
+
+        $shareId = filter_input(INPUT_POST, 'shareId');
+        $todoId = ToDoDB::getToDoByCode($shareId);
+
+        $newUserListId = ToDoDB::insertNewUserList($user->getId(), $todoId);
+
+        if ($todoId == null || $newUserListId == null) {
+            $badCode = true;
+            include 'todo_share.php';
+        } else {
+            header('Location: ../list_manager/index.php');
+        }
+
+        break;
     case 'task_list':
-        $todoId = filter_input(INPUT_POST, 'todoId');
-        $_SESSION['todoId'] = $todoId;
+        
+        if (isset($_POST['todoId'])) {
+            $todoId = filter_input(INPUT_POST, 'todoId');
+            $_SESSION['todoId'] = $todoId;
+        } else {    
+            $todoId = $_SESSION['todoId'];
+        }
+
         $tasks = TaskDB::getTasksByListId($todoId);
 
         if (isset($_SESSION['newTaskId']) && $_SESSION['newTaskId'] > 0) {
             $newTaskId = $_SESSION['newTaskId'];
             $_SESSION['newTaskId'] = -1;
-            $todoId = $_SESSION['todoId'];
         }
 
         include 'task_list.php';
@@ -118,6 +141,7 @@ switch ($controllerChoice) {                //naming convention is "'location'_'
         include 'task_edit.php';
         break;
     case 'task_edit_process':
+        $taskId = filter_input(INPUT_POST, 'taskId');
         $taskTypeId = filter_input(INPUT_POST, 'taskTypeId');
         $description = filter_input(INPUT_POST, 'description');
         $completed = filter_input(INPUT_POST, 'completed');
@@ -129,6 +153,5 @@ switch ($controllerChoice) {                //naming convention is "'location'_'
 
             header('Location: ../list_manager/index.php?controllerRequest=task_list');
         }
-        break;
         break;
 }

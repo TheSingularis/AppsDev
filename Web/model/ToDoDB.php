@@ -5,7 +5,7 @@ class ToDoDB
 {
     public static function getAllToDosByUserId($userId) {
         global $db;
-        $query = "SELECT list.id, list.title, list.description, list.created, list.updated
+        $query = "SELECT list.id, list.title, list.description, list.created, list.updated, list.shareUUID
                   FROM list
                   JOIN userList ON list.id = userList.listID
                   WHERE userList.userID = '$userId'";
@@ -19,7 +19,7 @@ class ToDoDB
         $toDoLists = array();
         
         foreach ($rows as $row) {
-            $todo = new ToDo($row['title'], $row['description'], $row['id'], count(TaskDB::getTasksByListId($row['id'])), $row['created'], $row['updated']);
+            $todo = new ToDo($row['title'], $row['description'], $row['id'], $row['shareUUID'], count(TaskDB::getTasksByListId($row['id'])), $row['created'], $row['updated']);
             
             $toDoLists[] = $todo;
         }
@@ -39,17 +39,31 @@ class ToDoDB
         $row = $statement->fetch();
         $statement->closeCursor();
 
-        $todo = new ToDo($row['title'], $row['description'], $row['id'], count(TaskDB::getTasksByListId($row['id'])), $row['created'], $row['updated']);
+        $todo = new ToDo($row['title'], $row['description'], $row['id'], $row['shareUUID'], count(TaskDB::getTasksByListId($row['id'])), $row['created'], $row['updated']);
 
         return $todo;
     }
 
+    public static function getToDoByCode($shareId) {
+                global $db;
+        $query = "SELECT id 
+                  FROM list
+                  WHERE shareUUID = '$shareId'";
+        
+        $statement = $db->prepare($query);
+
+        $statement->execute();
+        $row = $statement->fetch();
+        $statement->closeCursor();
+
+        return $row['id'];
+    }
 
     public static function insertNewList($todo) {
         global $db;
 
-        $query = "INSERT INTO list (title, description)
-                  VALUES (:title, :description)";
+        $query = "INSERT INTO list (title, description, shareUUID)
+                  VALUES (:title, :description, left(uuid(),8))";
         
         $statement = $db->prepare($query);
 
@@ -70,6 +84,7 @@ class ToDoDB
                   WHERE id = :id";
 
         $statement = $db->prepare($query);
+        
         $statement->bindValue(':id', $todoId);
         $statement->bindValue(':title', $title);
         $statement->bindValue(':description', $description);

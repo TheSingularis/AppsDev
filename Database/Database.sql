@@ -28,15 +28,16 @@ create table `list`
   `id` int primary key AUTO_INCREMENT,
   `title` varchar(30),
   `description` varchar(255),
+  `shareUUID` varchar(8),
   `created` timestamp default NOW(),
   `updated` timestamp default NOW()
 );
 
-insert into `list` (`title`,`description`)
+insert into `list` (`title`,`description`, `shareUUID`)
 values
-('Cats', 'The indoor cats'),
-('Chickens', 'Front two chicken coops'),
-('Dogs', 'The big dogs');
+('Cats', 'The indoor cats', 10000000),
+('Chickens', 'Front two chicken coops', 10000001),
+('Dogs', 'The big dogs', 10000002);
 
 create table `userList`
 ( `id` int primary key AUTO_INCREMENT,
@@ -141,3 +142,42 @@ alter table `productStore` add foreign key (`productID`) references `products` (
 alter table `productStore` add foreign key (`storeID`) references `stores` (`id`);
 
 alter table `task` add foreign key (`listID`) references `list` (`id`);
+
+/*----------------------------------------*/
+/* Password encryption */
+
+/* TODO: Set defaults and '=NULL's */
+
+/*
+alter table `user` add salt char(38);
+
+create procedure AddUser 
+	@pUserTypeID int default 2,
+    @pFirstName varchar(30),
+    @pLastName varchar(30),
+    @pEmail varchar(255),
+    @pPassword varchar(255)
+as
+begin
+	set nocount on
+    
+    declare @salt char(38) = uuid()
+    begin try
+		insert into `user` (userTypeID, firstName, lastName, email, password, salt)
+		values (@pUserTypeID, @pFirstName, @pLastName, @pEmail, hashbytes('SHA2_512', @pPassword+cast(@salt as varchar(38))), @salt)
+    
+		/* set @responseMessage = 'Success' 
+    end try
+    begin catch
+		/* set @responseMessage = 'Success' 
+    end catch
+end
+    
+/*
+  `userTypeID` int default 2,
+  `firstName` varchar(30),
+  `lastName` varchar(30),
+  `email` varchar(255),
+  `password` varchar(255),
+  `created` timestamp default NOW(),
+  `updated` timestamp default NOW()

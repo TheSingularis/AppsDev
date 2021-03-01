@@ -33,8 +33,8 @@
                 </ul>
             <?php else : ?>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
                     <li><a href="list_manager">ToDo Lists</a></li>
+                    <li><a href="user_manager?controllerRequest=user_profile">User Profile</a></li>
                     <li><a href="user_manager?controllerRequest=user_logout">Log Out</a></li>
                 </ul>
             <?php endif; ?>

@@ -67,4 +67,23 @@ class UserDB
 
         return new User($user['firstName'], $user['lastName'], $user['email'], $user['password'], $user['id'], $user['userTypeId'], $user['created'], $user['updated']);
     }
+
+    public static function updateUser($userId, $firstName, $lastName, $email, $password) {
+        global $db;
+
+        $query = "UPDATE user
+                  SET firstName = :firstName, lastName = :lastName, email = :email, password = :password, updated = NOW()
+                  WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $userId);
+        $statement->bindValue(':firstName', $firstName);
+        $statement->bindValue(':lastName', $lastName);
+        $statement->bindValue(':email', $email);
+        $statement->bindValue(':password', $password);
+        $statement->execute();
+
+        return $db->lastInsertId();
+    }
 } 

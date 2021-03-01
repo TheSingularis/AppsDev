@@ -74,4 +74,26 @@ switch ($controllerChoice) {
         session_destroy();
         include '../index.php';
         break;
+    case 'user_profile':
+        $user = unserialize($_SESSION['user']);               
+        
+        include 'user_profile.php';
+        break;
+    case 'user_profile_process':
+        $firstName = filter_input(INPUT_POST, 'firstName');
+        $lastName = filter_input(INPUT_POST, 'lastName');
+        $email = filter_input(INPUT_POST, 'email');
+        $password = filter_input(INPUT_POST, 'password');
+        $user = unserialize($_SESSION['user']); 
+
+        UserDB::updateUser($user->getId(), $firstName, $lastName, $email, $password);
+        
+        //login user to reset session variable for user
+        $user = UserDB::userLogin($email, $password);
+
+        $_SESSION['user'] = serialize($user);
+
+        header('Location: ../list_manager/index.php');
+    
+        break;
 }
