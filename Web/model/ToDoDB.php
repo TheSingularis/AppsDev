@@ -89,6 +89,7 @@ class ToDoDB
         $statement->bindValue(':title', $title);
         $statement->bindValue(':description', $description);
         $statement->execute();          
+        $statement->closeCursor();
 
         return $db->lastInsertId();
     }
@@ -101,12 +102,53 @@ class ToDoDB
 
         $statement = $db->prepare($query);
 
-        $statement->bindValue(':listID', $todoId);
         $statement->bindValue(':userID', $userId);
 
         $statement->execute();
         $statement->closeCursor();
 
         return $db->lastInsertId();
+    }
+
+    public static function deleteList($todoId) {
+        global $db;
+
+        ToDoDB::deleteUserList($todoId);
+        ToDoDB::deleteTasks($todoId);
+
+        $query = "DELETE FROM list WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $todoId);
+
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    public static function deleteUserList($todoId) {
+        global $db;
+
+        $query = "DELETE FROM userList WHERE listID = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $todoId);
+
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    public static function deleteTasks($todoId) {
+        global $db;
+
+        $query = "DELETE FROM task WHERE listID = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $todoId);
+
+        $statement->execute();
+        $statement->closeCursor();
     }
 }

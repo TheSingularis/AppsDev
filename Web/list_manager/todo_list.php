@@ -14,6 +14,7 @@
             <td><b>Updated - Temp</b></td>
             <td><b>Edit - Temp</b></td>
             <td><b>View - Temp</b></td>
+            <td><b>Delete - Temp</b></td>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,13 @@
                                 <input type="hidden" name="controllerRequest" value="task_list">
                                 <input type="hidden" name="todoId" value="<?php echo $todo->getId(); ?>">
                                 <input type="submit" value="View">
+                            </td>
+                        </form>
+                        <form action="list_manager/index.php" method="post">
+                            <td>
+                                <input type="hidden" name="controllerRequest" value="todo_delete">
+                                <input type="hidden" name="todoId" value="<?php echo $todo->getId(); ?>">
+                                <input type="submit" value="Delete">
                             </td>
                         </form>
                     </tr>

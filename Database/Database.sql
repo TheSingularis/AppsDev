@@ -10,6 +10,7 @@ create table `user`
   `lastName` varchar(30),
   `email` varchar(255),
   `password` varchar(255),
+  `salt` varchar(255),
   `created` timestamp default NOW(),
   `updated` timestamp default NOW()
 );
@@ -18,7 +19,9 @@ insert into `user`
 	(`userTypeID`, `firstName`, `lastName`, `email`, `password`)
 values
 (1, 'jordan', 'sluiter', 'jordan@yahoo.com', 'test'),
-(1, 'andy', 'bangsberg', 'test@gmail.com', 'test'),
+(1, 'test', 'admin', 'testadmin@test.com', 'admin'),
+(2, 'test', 'user', 'testuser@test.com', 'user'),
+(2, 'andy', 'bangsberg', 'test@gmail.com', 'test'),
 (2, 'firstName', 'lastName', 'squishycat@hotmail.com', 'test'),
 (2, 'spongebob', 'squarepants', 'tcace@yahoo.com', 'test'),
 (2, 'panda', 'express', 'heythatsmine@outlook.com', 'test');
@@ -48,9 +51,10 @@ create table `userList`
 );
 
 insert into `userList` (`listID`, `userID`)
-values (1, 1),
-	   (1, 2),
-       (2, 1);
+values (1, 2),
+	   (2, 2),
+       (2, 3),
+       (3, 3);
 
 create table `userType`
 (
@@ -146,33 +150,58 @@ alter table `task` add foreign key (`listID`) references `list` (`id`);
 /*----------------------------------------*/
 /* Password encryption */
 
-/* TODO: Set defaults and '=NULL's */
-
 /*
-alter table `user` add salt char(38);
 
-create procedure AddUser 
-	@pUserTypeID int default 2,
-    @pFirstName varchar(30),
-    @pLastName varchar(30),
-    @pEmail varchar(255),
-    @pPassword varchar(255)
-as
+delimiter //
+
+create procedure spAddUser (
+	pUserTypeId int,
+	pFirstName varchar(30),
+	pLastName varchar(30),
+	pEmail varchar(255),
+	pPassword varchar(255)
+) 
+begin    
+    
+    declare salt varchar(255) default '';
+    declare encryptedPassword varchar(255) default '';
+    set salt = substring(sha1(rand()), 1, 6);
+    set encryptedPassword = sha1(concat(salt, pPassword));
+    
+	insert into `user` (`userTypeID`, `firstName`, `lastName`, `email`, `password`, `salt`)
+    values (pUserTypeId, pFirstName, pLastName, pEmail, encryptedPassword, salt);
+    
+end //
+
+delimiter ;
+
+go
+
+delimiter //
+
+--create procedure spUpdateUser ()
+
+delimiter ;
+
+go
+
+delimiter //
+
+create procedure spLoginUser (
+	pEmail varchar(255),
+    pPassword varchar(255)
+)
 begin
-	set nocount on
+	
+    declare salt varchar(255) default '';
+    declare encryptedPassword varchar(255) default '';
+    set salt = select salt from user where email = pEmail;
+    set encryptedPassword = select password from user where email = pEmail;
     
-    declare @salt char(38) = uuid()
-    begin try
-		insert into `user` (userTypeID, firstName, lastName, email, password, salt)
-		values (@pUserTypeID, @pFirstName, @pLastName, @pEmail, hashbytes('SHA2_512', @pPassword+cast(@salt as varchar(38))), @salt)
-    
-		/* set @responseMessage = 'Success' 
-    end try
-    begin catch
-		/* set @responseMessage = 'Success' 
-    end catch
 end
-    
+
+delimiter ;
+
 /*
   `userTypeID` int default 2,
   `firstName` varchar(30),

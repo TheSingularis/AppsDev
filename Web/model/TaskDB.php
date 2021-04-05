@@ -62,7 +62,7 @@ class TaskDB
         return $db->lastInsertId();
     }
 
-    public function updateTask ($taskId, $taskTypeId, $description, $completed) {
+    public static function updateTask ($taskId, $taskTypeId, $description, $completed) {
         global $db;
 
         $query = "UPDATE task
@@ -77,7 +77,21 @@ class TaskDB
         $statement->bindValue(':completed', $completed);
 
         $statement->execute();
+        $statement->closeCursor();
 
         return $db->lastInsertId();
+    }
+
+    public static function deleteTask ($taskId) {
+        global $db;
+
+        $query = "DELETE FROM task WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $taskId);
+
+        $statement->execute();
+        $statement->closeCursor();
     }
 }

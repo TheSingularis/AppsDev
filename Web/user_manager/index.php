@@ -32,8 +32,6 @@ switch ($controllerChoice) {
         $email = strtolower(filter_input(INPUT_POST, 'email')); //to lower to simplify distict email addresses
         $password = filter_input(INPUT_POST, 'password');
 
-        //TODO: hash password
-
         $distinct = UserDB::newEmail($email);
 
         if ($distinct) {
@@ -58,7 +56,7 @@ switch ($controllerChoice) {
 
         //TODO: hash password
 
-        $user = UserDB::userLogin($email, $password);
+        $user = UserDB::loginUser($email, $password);
 
         if ($user !== null) {
             $_SESSION['user'] = serialize($user);
@@ -89,11 +87,51 @@ switch ($controllerChoice) {
         UserDB::updateUser($user->getId(), $firstName, $lastName, $email, $password);
         
         //login user to reset session variable for user
-        $user = UserDB::userLogin($email, $password);
+        $user = UserDB::loginUser($email, $password);
 
         $_SESSION['user'] = serialize($user);
 
         header('Location: ../list_manager/index.php');
     
+        break;
+    case 'user_delete_process':
+        $password = filter_input(INPUT_POST, 'password');
+        $user = unserialize($_SESSION['user']);               
+
+        $badDeletePassword = false;
+
+        if ($user->getPassword() == $password) {
+            UserDB::deleteUser($user);
+            
+            session_destroy();
+            include '../index.php';
+        } else {
+            $badDeletePassword = true;
+            include 'user_profile.php';
+        }
+
+        break;
+    case 'user_password_change_process':
+        $passVerify1 = filter_input(INPUT_POST, 'passVerify1');
+        $passVerify2 = filter_input(INPUT_POST, 'passVerify2');
+        $newPassword = filter_input(INPUT_POST, 'newPassword');
+
+        $user = unserialize($_SESSION['user']);               
+
+        $badVerifyPassword = false;
+
+        if ($passVerify1 == $user->getPassword() && $passVerify1 == $passVerify2) {
+            UserDB::updateUser($user->getId(), $user->getFirstName(), $user->getLastName(), $user->getEmail(), $newPassword);
+
+            $user = UserDB::loginUser($user->getEmail(), $newPassword);
+
+            $_SESSION['user'] = serialize($user);
+
+            header('Location: ../list_manager/index.php');
+        } else {
+            $badVerifyPassword = true;
+            include 'user_profile.php';
+        }
+
         break;
 }

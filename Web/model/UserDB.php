@@ -38,7 +38,7 @@ class UserDB
         }
     }
 
-    public static function userLogin($email, $password) {
+    public static function loginUser($email, $password) {
         global $db;
         $query = "SELECT id, email, password FROM user WHERE email = '$email' and password = '$password'";
 
@@ -83,7 +83,34 @@ class UserDB
         $statement->bindValue(':email', $email);
         $statement->bindValue(':password', $password);
         $statement->execute();
+        $statement->closeCursor();
 
         return $db->lastInsertId();
+    }
+
+    public static function deleteUser($user) {
+        global $db;
+
+        UserDB::deleteUserList($user);
+
+        $query = "DELETE FROM user WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':id', $user->getId());
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
+    public static function deleteUserList($user) {
+        global $db;
+
+        $query = "DELETE FROM userList WHERE userID = :userID";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':userID', $user->getId());
+        $statement->execute();
+        $statement->closeCursor();
     }
 } 

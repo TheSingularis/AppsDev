@@ -17,6 +17,7 @@
                 <td><b>Created - Temp</b></td>
                 <td><b>Updated - Temp</b></td>
                 <td><b>Edit - Temp</b></td>
+                <td><b>Delete - Temp</b></td>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +43,13 @@
                                 <input type="hidden" name="controllerRequest" value="task_edit">
                                 <input type="hidden" name="taskId" value="<?php echo $task->getId(); ?>">
                                 <input type="submit" value="Edit">
+                            </td>
+                        </form>
+                        <form action="list_manager/index.php" method="post">
+                            <td>
+                                <input type="hidden" name="controllerRequest" value="task_delete">
+                                <input type="hidden" name="taskId" value="<?php echo $task->getId(); ?>">
+                                <input type="submit" value="Delete">
                             </td>
                         </form>
                     </tr>

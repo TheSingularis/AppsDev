@@ -154,4 +154,18 @@ switch ($controllerChoice) {                //naming convention is "'location'_'
             header('Location: ../list_manager/index.php?controllerRequest=task_list');
         }
         break;
+    case 'todo_delete':
+        $todoId = filter_input(INPUT_POST, 'todoId');
+
+        ToDoDB::deleteList($todoId);
+
+        header('Location: ../list_manager/index.php?controllerRequest=todo_list');
+        break;
+    case 'task_delete':
+        $taskId = filter_input(INPUT_POST, 'taskId');
+
+        TaskDB::deleteTask($taskId);
+        
+        header('Location: ../list_manager/index.php?controllerRequest=task_list');
+        break;
 }
