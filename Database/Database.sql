@@ -105,7 +105,7 @@ values
 (2, 'collect chicken eggs'),
 (2, 'Fill the cats water');
 
-create table `stores`
+create table `store`
 (
   `id` int primary key AUTO_INCREMENT,
   `storeName` varchar(25),
@@ -113,19 +113,16 @@ create table `stores`
   `updated` timestamp default NOW()
 );
 
-create table `products`
+insert into `store` (`storeName`)
+values
+('Chewy'),
+('Amazon(NYI)');
+
+create table `product`
 (
   `id` int primary key AUTO_INCREMENT,
   `productName` varchar(255),
-  `productLink` varchar(255),
-  `created` timestamp default NOW(),
-  `updated` timestamp default NOW()
-);
-
-create table `productStore`
-(
-  `id` int primary key AUTO_INCREMENT,
-  `productID` int,
+  `productUrl` varchar(1000),
   `storeID` int,
   `created` timestamp default NOW(),
   `updated` timestamp default NOW()
@@ -137,15 +134,13 @@ alter table `userList` add foreign key (`userID`) references `user` (`id`);
 
 alter table `user` add foreign key (`userTypeID`) references `userType` (`id`);
 
-alter table `task` add foreign key (`productID`) references `products` (`id`);
+alter table `task` add foreign key (`productID`) references `product` (`id`);
 
 alter table `task` add foreign key (`taskTypeID`) references `taskType` (`id`);
 
-alter table `productStore` add foreign key (`productID`) references `products` (`id`);
-
-alter table `productStore` add foreign key (`storeID`) references `stores` (`id`);
-
 alter table `task` add foreign key (`listID`) references `list` (`id`);
+
+alter table `product` add foreign key (`storeID`) references `store` (`id`);
 
 /*----------------------------------------*/
 /* Password encryption */

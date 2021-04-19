@@ -102,6 +102,7 @@ class ToDoDB
 
         $statement = $db->prepare($query);
 
+        $statement->bindValue(':listID', $todoId);
         $statement->bindValue(':userID', $userId);
 
         $statement->execute();

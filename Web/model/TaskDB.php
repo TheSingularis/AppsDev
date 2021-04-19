@@ -18,7 +18,7 @@ class TaskDB
         $tasks = array();
 
         foreach ($rows as $row) {
-            $task = new Task($row['taskTypeID'], $row['description'], $row['completed'], $row['id'], $row['listID'], $row['repeatTime'], $row['productID'], $row['productVolume'], $row['productPurchaseLimit'], $row['created'], $row['updated']);
+            $task = new Task($row['taskTypeID'], $row['description'], $row['completed'], $row['listID'], $row['id'], $row['repeatTime'], $row['productID'], $row['productVolume'], $row['productPurchaseLimit'], $row['created'], $row['updated']);
             
             $tasks[] = $task;    
         }
@@ -75,6 +75,24 @@ class TaskDB
         $statement->bindValue(':taskTypeID', $taskTypeId);
         $statement->bindValue(':description', $description);
         $statement->bindValue(':completed', $completed);
+
+        $statement->execute();
+        $statement->closeCursor();
+
+        return $db->lastInsertId();
+    }
+
+    public static function updateTaskProduct($task, $productId) {
+        global $db;
+
+        $query = "UPDATE task
+                  SET productID = :productID, updated = NOW()
+                  WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':productID', $productId);
+        $statement->bindValue(':id', $task->getId());
 
         $statement->execute();
         $statement->closeCursor();

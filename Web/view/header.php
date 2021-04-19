@@ -9,7 +9,10 @@
     <link rel="stylesheet" type="text/css" href="/style/main.css">
     <link rel="stylesheet" type="text/css" href="/style/old_main.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 </head>
 
 <body>

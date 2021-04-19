@@ -16,6 +16,6 @@ require_once 'model/User.php';
 require_once 'view/header.php';
 ?>
 
-
+<main><!-- Home page stuff goes here? Maybe update news?--></main>
 
 <?php require_once 'view/footer.php'; ?>
