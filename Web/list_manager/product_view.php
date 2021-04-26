@@ -10,6 +10,9 @@
     
     <br>
 
+    <form action="<?php echo $product->getProductUrl(); ?>" method="get" target="_blank">
+        <input type="submit" value="Go To Store">
+    </form>
     <form action="list_manager/index.php" method="post">
         <input type="hidden" name="controllerRequest" value="product_edit">
         

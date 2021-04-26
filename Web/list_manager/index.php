@@ -110,6 +110,12 @@ case 'task_list':
     }
 
     $tasks = TaskDB::getTasksByListId($todoId);
+    $products = array();
+
+    foreach ($tasks as $task) {
+        $product = ProductDB::getProductById($task->getProductId());
+        $products[] = $product;
+    }
 
     if (isset($_SESSION['newTaskId']) && $_SESSION['newTaskId'] > 0) {
         $newTaskId = $_SESSION['newTaskId'];
@@ -217,5 +223,21 @@ case 'product_view':
     $_SESSION['currentTask'] = filter_input(INPUT_POST, 'currentTask');
 
     include 'product_view.php';
+    break;
+case 'task_complete_toggle':
+    $taskId = filter_input(INPUT_POST, 'taskId');
+
+    $task = TaskDB::getTaskById($taskId);
+    $taskCompleted = $task->getCompleted();
+
+    if ($taskCompleted == 1) {
+        //0
+        TaskDB::setTaskCompleted($taskId, 0);
+    } else {
+        //1
+        TaskDB::setTaskCompleted($taskId, 1);
+    }
+
+    header('Location: ../list_manager/index.php?controllerRequest=task_list');
     break;
 }

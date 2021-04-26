@@ -1,36 +1,85 @@
 <?php require_once '../view/header.php'; ?>
 
 <main>
-
-    <table>
-        <thead>
-            <tr>
-                <td><b>ID - Temp</b></td>
-                <td><b>List ID - Temp</b></td>
-                <td><b>Task Type ID - Temp</b></td>
-                <td><b>Description</b></td>
-                <td><b>Completed</b></td>
-                <td><b>Repeat Time - Temp</b></td>
-                <td><b>Product</b></td>
-                <td><b>Product ID - Temp</b></td>
-                <td><b>Product Volume - Temp</b></td>
-                <td><b>Product Purchase Limit - Temp</b></td>
-                <td><b>Created - Temp</b></td>
-                <td><b>Updated - Temp</b></td>
-                <td><b>Edit - Temp</b></td>
-                <td><b>Delete - Temp</b></td>
-            </tr>
-        </thead>
-        <tbody>
-        <!-- 
-            Use js so i can click on the row to edit or go into the list?? 
-        -->
+    <a class="btn btn-primary" href="list_manager?controllerRequest=task_add" role="button">Add new Task</a>
+    <br>
+    <br>
+    <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+        <div class="card">
             <?php if (count($tasks) > 0) {
                 foreach ($tasks as $task) : ?>
-                    <?php $tableRow = ($newToDoId != null && $newToDoId == $task->getId()) ? '<tr id="new">' : '<tr>'; ?>
-                        <td><?php echo $task->getId(); ?></td>
-                        <td><?php echo $task->getListId(); ?></td>
-                        <td><?php echo $task->getTaskTypeId(); ?></td>
+                <div class="card-header" role="tab" id="heading<?php echo $task->getId(); ?>">
+                    <?php if ($task->getProductId() == null) : ?>
+                        <span><?php echo $task->getDescription(); ?></span>
+                        <span><!-- Empty for spacing --></span>
+                    <?php else : ?>
+                        <span><?php echo $task->getDescription(); ?></span>
+                        <span>
+                            <?php 
+                            foreach ($products as $product) {
+                                if ($product->getId() == $task->getProductId()) {
+                                    echo $product->getProductName();
+                                }
+                            }
+                            ?>
+                        </span>
+                    <?php endif; ?>
+
+                    <!-- check button -->
+                    <span>
+                        <form action="list_manager/index.php" method="post">
+                        <input type="hidden" name="controllerRequest" value="task_complete_toggle">
+                        <input type="hidden" name="taskId" value="<?php echo $task->getId(); ?>">
+
+                        <input type="image" name="submit" src="addons/bootstrap-icons/<?php echo ($task->getCompleted() == 1) ? 'check-square' : 'x-square'; ?>.svg" width="35" color="blue">
+                        </form>
+                    </span>
+
+                    <!-- collapse button for edit -->
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapse<?php echo $task->getId(); ?>" aria-expanded="false" aria-controls="collapse<?php echo $task->getId(); ?>" style="color:inherit;">
+                        <h1 class="mb-0">
+                        <i class="bi-caret-down rotate-icon" width="35"></i>
+                        </h1>
+                    </a>
+                </div>
+                <div id="collapse<?php echo $task->getId(); ?>" class="collapse" role="tabpanel" aria-labledby="heading<?php echo $task->getId(); ?>" data-parent="#accordionEx">
+                    <div class="card-body">
+                            <span>
+                                <form action="list_manager/index.php" method="post">
+                                    <input type="hidden" name="controllerRequest" value="task_edit">
+                                    <input type="hidden" name="taskId" value="<?php echo $task->getId(); ?>">
+                                    <input type="submit" value="Edit">
+                                </form>
+                            </span>
+                            <span>
+                                <form action="list_manager/index.php" method="post">
+                                    <input type="hidden" name="controllerRequest" value="<?php echo ($task->getProductId() != null) ? "product_view" : "product_add"; ?>">
+                                    <input type="hidden" name="productId" value="<?php echo ($task->getProductId() != null) ? $task->getProductId() : -1; ?>">
+                                    <input type="hidden" name="currentTask" value="<?php echo $task->getId(); ?>">
+                                    <input type="submit" value="<?php echo ($task->getProductId() != null) ? "View" : "Add"; ?> Product">
+                                </form>     
+                            </span>
+                            <span>
+                                <?php echo ($task->getCompleted() == 1) ? 'Completed' : 'Not Completed'; ?></span>
+                            <span>
+                                <form action="list_manager/index.php" method="post">
+                                    <input type="hidden" name="controllerRequest" value="task_delete">
+                                    <input type="hidden" name="taskId" value="<?php echo $task->getId(); ?>">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </span>
+                        </div>
+                    </div>
+                <?php endforeach;
+            }?>
+        </div>
+    </div>
+
+        <!-- 
+        <tbody>
+            <?php if (count($tasks) > 0) {
+                foreach ($tasks as $task) : ?>
+                    <tr>
                         <td><?php echo $task->getDescription(); ?></td>
                         <td><?php echo ($task->getCompleted() == 1) ? "True" : "False"; ?></td>
                         <td><?php echo $task->getRepeatTime(); ?></td>
@@ -42,11 +91,6 @@
                                <input type="submit" value="<?php echo ($task->getProductId() != null) ? "View" : "Add"; ?>">
                             </td>
                         </form>
-                        <td><?php echo $task->getProductId(); ?></td>
-                        <td><?php echo $task->getProductVolume(); ?></td>
-                        <td><?php echo $task->getProductPurchaseLimit(); ?></td>
-                        <td><?php echo $task->getUpdated(); ?></td>
-                        <td><?php echo $task->getUpdated(); ?></td>
                         <form action="list_manager/index.php" method="post">
                             <td>
                                 <input type="hidden" name="controllerRequest" value="task_edit">
@@ -65,15 +109,15 @@
                 <?php endforeach; 
             }?>
             <tr>
-                <td colspan="14">
+                <td colspan="14">    
+
                     <a href="list_manager?controllerRequest=task_add">
-                        <!-- TODO: Center text -->
                         Add New Task List
                     </a>
                 </td>
             </tr>
         </tbody>
-    </table>
+            -->
 
 </main>
 

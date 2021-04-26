@@ -112,4 +112,22 @@ class TaskDB
         $statement->execute();
         $statement->closeCursor();
     }
+
+    public static function setTaskCompleted ($taskId, $completed) {
+        global $db;
+
+        $query = "UPDATE task
+                  SET completed = :completed, updated = NOW()
+                  WHERE id = :id";
+
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':completed', $completed);
+        $statement->bindValue(':id', $taskId);
+
+        $statement->execute();
+        $statement->closeCursor();
+
+        return $db->lastInsertId();
+    }
 }

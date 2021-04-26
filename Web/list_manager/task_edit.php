@@ -5,9 +5,9 @@
         <input type="hidden" name="controllerRequest" value="task_edit_process">
         <input type="hidden" name="taskId" value="<?php echo $taskId; ?>">
 
-        <input type="text" name="taskTypeId" placeholder="TaskType" value="<?php echo $task->getTaskTypeId(); ?>"><br>
+        <input type="hidden" name="taskTypeId" value="1"><br>
         <input type="text" name="description" placeholder="Description" value="<?php echo $task->getDescription(); ?>"><br>
-        <input type="text" name="completed" placeholder="Completed" value="<?php echo $task->getCompleted(); ?>"><br>
+        <input type="hidden" name="completed" value="<?php echo $task->getCompleted(); ?>"><br>
 
         <input type="submit" value="Save">
     </form>    

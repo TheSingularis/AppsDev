@@ -4,9 +4,9 @@
     <form action="list_manager/index.php" method="post">
         <input type="hidden" name="controllerRequest" value="task_add_process">
 
-        <input type="text" name="taskTypeId" placeholder="TaskType"><br>
+        <input type="hidden" name="taskTypeId" value="1"><br>
         <input type="text" name="description" placeholder="Description"><br>
-        <input type="text" name="completed" placeholder="Completed"><br>
+        <input type="hidden" name="completed" value="0"><br>
 
         <input type="submit" value="Add">
     </form>
