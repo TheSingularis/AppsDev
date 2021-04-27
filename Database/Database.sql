@@ -1,6 +1,6 @@
-drop database if exists AppsDev;
-create database AppsDev;
-use AppsDev;
+/*drop database if exists sluiterj_AppsDev;
+create database sluiterj_AppsDev;*/
+use sluiterj_AppsDev;
 
 create table `user`
 (

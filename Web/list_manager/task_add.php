@@ -6,9 +6,9 @@
 
         <input type="hidden" name="taskTypeId" value="1"><br>
         <input type="text" name="description" placeholder="Description"><br>
-        <input type="hidden" name="completed" value="0"><br>
+        <input type="hidden" name="completed" value="0">
 
-        <input type="submit" value="Add">
+        <input type="submit" class="btn btn-primary" value="Add">
     </form>
 </main>
 

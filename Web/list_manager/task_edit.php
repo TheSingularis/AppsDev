@@ -7,10 +7,10 @@
 
         <input type="hidden" name="taskTypeId" value="1"><br>
         <input type="text" name="description" placeholder="Description" value="<?php echo $task->getDescription(); ?>"><br>
-        <input type="hidden" name="completed" value="<?php echo $task->getCompleted(); ?>"><br>
+        <input type="hidden" name="completed" value="<?php echo $task->getCompleted(); ?>">
 
-        <input type="submit" value="Save">
-    </form>    
+        <input type="submit" class="btn btn-primary" value="Save">
+    </form>
 </main>
 
 <?php require_once '../view/footer.php'; ?>
