@@ -1,5 +1,5 @@
-/*drop database if exists sluiterj_AppsDev;
-create database sluiterj_AppsDev;*/
+drop database if exists sluiterj_AppsDev;
+create database sluiterj_AppsDev;
 use sluiterj_AppsDev;
 
 create table `user`
@@ -38,9 +38,9 @@ create table `list`
 
 insert into `list` (`title`,`description`, `shareUUID`)
 values
-('Cats', 'The indoor cats', 10000000),
-('Chickens', 'Front two chicken coops', 10000001),
-('Dogs', 'The big dogs', 10000002);
+('Cats', 'The indoor cats', 'abcdefgh'),
+('Chickens', 'Front two chicken coops', 12345678),
+('Dogs', 'The big dogs', 'a1b2c3d4');
 
 create table `userList`
 ( `id` int primary key AUTO_INCREMENT,
@@ -86,7 +86,7 @@ create table `task`
 (
   `id` int primary key AUTO_INCREMENT,
   `listID` int,
-  `taskTypeID` int default 1,	/* 1 is a checkbox task with no complications */
+  `taskTypeID` int default 1,	/* 1 for single check, 2 for daily recurring */
   `description` varchar(255),
   `completed` boolean default false,
   `repeatTime` int default -1,
@@ -128,6 +128,32 @@ create table `product`
   `updated` timestamp default NOW()
 );
 
+create table `history`
+(
+  `id` int primary key AUTO_INCREMENT,
+  `taskID` int,
+  `dateComplete` timestamp
+);
+
+insert into `history` (`taskID`, `dateComplete`)
+values
+(1, '2021-01-01'),
+(1, '2021-02-02'),
+(1, '2021-03-01'),
+(1, '2021-03-02'),
+(1, '2021-03-03'),
+(1, '2021-03-04'),
+(1, '2021-03-05'),
+(1, '2021-03-06'),
+(1, '2021-03-07'),
+(1, '2021-03-08'),
+(1, '2021-03-09'),
+(1, '2021-03-10'),
+(1, '2021-04-11'),
+(1, '2021-05-02'),
+(1, '2021-06-01');
+
+
 alter table `userList` add foreign key (`listID`) references `list` (`id`);
 
 alter table `userList` add foreign key (`userID`) references `user` (`id`);
@@ -142,13 +168,26 @@ alter table `task` add foreign key (`listID`) references `list` (`id`);
 
 alter table `product` add foreign key (`storeID`) references `store` (`id`);
 
-/*----------------------------------------*/
-/* Password encryption */
+alter table `history` add foreign key (`taskID`) references `task` (`id`);
 
+/* -------------------- */
+/*  Completion History  */
 /*
+set global event_scheduler = on;
 
+create event taskHistory
+  on schedule
+    every 1 day
+    starts (timestamp(current_date) + interval 23 hour + interval 59 minute)
+  do
+    insert into `history` (`taskID`, `dateComplete`)
+	select id, now() as dateComplete from task where completed is true 
+
+/* -------------------- */
+/*      Encryption      */
+
+--Inserts new user
 delimiter //
-
 create procedure spAddUser (
 	pUserTypeId int,
 	pFirstName varchar(30),
@@ -167,21 +206,30 @@ begin
     values (pUserTypeId, pFirstName, pLastName, pEmail, encryptedPassword, salt);
     
 end //
-
 delimiter ;
-
 go
 
+--Updates user password
 delimiter //
+create procedure spUpdateUserPassword (
+	pEmail varchar(255),
+    pPassword varchar(255)
+)
+begin
 
---create procedure spUpdateUser ()
+	declare salt varchar(255) default '';
+    declare encryptedPassword varchar(255) default '';
+    set salt = select salt from user where email = pEmail;
+    set encryptedPassword = sha1(concat(salt, pPassword));
+    
+    update `user` set password = encryptedPassword where email = pEmail;
 
+end //
 delimiter ;
-
 go
 
+--Outputs true or false if the login is good or not
 delimiter //
-
 create procedure spLoginUser (
 	pEmail varchar(255),
     pPassword varchar(255)
@@ -190,18 +238,13 @@ begin
 	
     declare salt varchar(255) default '';
     declare encryptedPassword varchar(255) default '';
+    declare newPassword varchar(255) default '';
+    
     set salt = select salt from user where email = pEmail;
     set encryptedPassword = select password from user where email = pEmail;
+	set password = sha1(concat(salt, pPassword));
     
-end
-
+    select if (encryptedPassword equals password, true, false)
+    
+end //
 delimiter ;
-
-/*
-  `userTypeID` int default 2,
-  `firstName` varchar(30),
-  `lastName` varchar(30),
-  `email` varchar(255),
-  `password` varchar(255),
-  `created` timestamp default NOW(),
-  `updated` timestamp default NOW()
