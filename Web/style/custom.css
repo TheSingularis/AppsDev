@@ -1,0 +1,31 @@
+body {
+    margin-top: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.card > div.card-header {
+    display: grid;
+    grid-template-columns: 3fr 3fr 1fr 1fr 1fr;
+}
+
+.card-body {
+    display: grid;
+    grid-template-columns: 3fr 3fr 1fr 1fr 1fr;
+}
+
+div.slick-slide > img {
+    
+    max-height: 300px;
+    max-width: 300px;
+
+}
+
+img {
+    height: auto;
+    width: auto;
+}
+
+.form-control {
+    max-width: 20em;
+}
